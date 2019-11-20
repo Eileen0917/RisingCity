@@ -8,7 +8,9 @@ JC = javac
 CLASSES = \
 		Building.java \
 		MinHeap.java \
-		RisingCity.java
+		RedBlackTree.java \
+		RedBlackNode.java \
+		RisingCity.java 
 
 default: classes
 

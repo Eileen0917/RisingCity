@@ -9,6 +9,7 @@ public class RisingCity {
     private static int runningBuildingCounter;
     private static Building runningBuilding;
     private static MinHeap heap = new MinHeap();
+    private static RedBlackTree rbt = new RedBlackTree();
 
     public static void main(String[] args) {
         runningBuildingCounter = 0;
@@ -23,7 +24,7 @@ public class RisingCity {
                 case "Insert":
                     Building newBuilding = new Building(Integer.valueOf(nextLine[2]), Integer.valueOf(nextLine[3]));
                     heap.insert(newBuilding);
-                    // rbt.add(newBuilding);
+                    rbt.insert(newBuilding);
                     break;
 
                 case "PrintBuliding":

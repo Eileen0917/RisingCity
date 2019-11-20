@@ -1,13 +1,13 @@
 public class Building {
+    int buildingNum;
+    int totalTime;
+    int executedTime;
+
     public Building(int bNum, int totalTime) {
         this.buildingNum = bNum;
         this.executedTime = 0;
         this.totalTime = totalTime;
     }
-
-    int buildingNum;
-    int totalTime;
-    int executedTime;
 
     public int getBuildingNum() {
         return buildingNum;
