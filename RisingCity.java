@@ -5,20 +5,25 @@ import java.io.IOException;
 public class RisingCity {
     private static BufferedReader reader;
     private static int globalCounter = 0;
+    private static Boolean keepWorking = true;
+    private static int runningBuildingCounter;
+    private static Building runningBuilding;
+    private static MinHeap heap = new MinHeap();
 
     public static void main(String[] args) {
-        openFile();
+        runningBuildingCounter = 0;
+        runningBuilding = null;
 
-        // Boolean finished = false;
+        openFile();
         String[] nextLine = readFile();
-        // MinHeap heap = new MinHeap();
 
         do {
             if (Integer.valueOf(nextLine[0]).equals(globalCounter)) {
                 switch (nextLine[1]) {
                 case "Insert":
-                    // do insert to min heap and RBT
-                    System.out.println("ready to insert");
+                    Building newBuilding = new Building(Integer.valueOf(nextLine[2]), Integer.valueOf(nextLine[3]));
+                    heap.insert(newBuilding);
+                    // rbt.add(newBuilding);
                     break;
 
                 case "PrintBuliding":
@@ -28,13 +33,50 @@ public class RisingCity {
                 }
 
                 nextLine = readFile();
-                // build city and check finished?
-                globalCounter += 1;
-            } else {
-                // build city and check finished?
-                globalCounter += 1;
             }
-        } while (nextLine[1] != "");
+
+            if (runningBuildingCounter == 0) {
+                setBuilding();
+            }
+
+            constructBuilding();
+            globalCounter += 1;
+        } while (nextLine[1] != "" || keepWorking);
+    }
+
+    private static void setBuilding() {
+        runningBuilding = heap.findConstructBuilding();
+
+        if (runningBuilding == null) {
+            keepWorking = false;
+            return;
+        }
+
+        if (runningBuilding.getExecutedTime() + 5 >= runningBuilding.getTotalTime()) {
+            runningBuildingCounter = runningBuilding.getTotalTime() - runningBuilding.getExecutedTime();
+        } else {
+            runningBuildingCounter = 5;
+        }
+    }
+
+    private static void constructBuilding() {
+        if (runningBuildingCounter != 0 && runningBuilding != null) {
+            heap.increaseKey(runningBuilding, 1);
+            runningBuildingCounter -= 1;
+            if (runningBuilding.getExecutedTime() == runningBuilding.getTotalTime()) {
+                // rbt.delete(runningBuilding);
+                heap.remove(runningBuilding);
+
+                // TODO: write to output file
+                System.out.println("finish building.");
+
+                runningBuilding = heap.findConstructBuilding();
+                if (runningBuilding == null) {
+                    keepWorking = false;
+                    return;
+                }
+            }
+        }
     }
 
     private static String[] readFile() {

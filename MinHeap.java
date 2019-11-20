@@ -1,15 +1,97 @@
 public class MinHeap {
-    private int heap[];
-    private int size;
-    private int maxsize;
+    private Building[] heapArray;
+    private int lastIndex;
+    private int maxSize;
 
-    private static final int FRONT = 1;
+    public MinHeap() {
+        maxSize = 1;
+        lastIndex = -1;
+        heapArray = new Building[1];
+    }
 
-    public MinHeap(int maxsize) {
-        this.maxsize = maxsize;
-        this.size = 0;
-        heap = new int[this.maxsize + 1];
-        heap[0] = Integer.MIN_VALUE;
+    public void insert(Building newBuilding) {
+        if ((++lastIndex) == maxSize) {
+            doubleHeapArray();
+        }
+
+        heapArray[lastIndex] = newBuilding;
+
+        int currentIndex = lastIndex;
+        while (heapArray[parent(currentIndex)].getExecutedTime() > heapArray[currentIndex].getExecutedTime()) {
+
+            if (currentIndex == 0) {
+                break;
+            }
+
+            swap(currentIndex, parent(currentIndex));
+            currentIndex = (currentIndex - 1) / 2;
+        }
+    }
+
+    public Building findConstructBuilding() {
+        if (lastIndex != -1) {
+            return heapArray[0];
+        } else {
+            return null;
+        }
+    }
+
+    public void increaseKey(Building b, int t) {
+        int currentIndex = 0;
+        int foundIndex = -1;
+
+        for (Building building : heapArray) {
+            if (building.getBuildingNum() == b.getBuildingNum()) {
+                foundIndex = currentIndex;
+                break;
+            }
+            currentIndex++;
+        }
+
+        if (foundIndex == -1) {
+            return;
+        }
+        heapArray[foundIndex].setExecutedTime(heapArray[foundIndex].getExecutedTime() + t);
+        minHeapify(foundIndex);
+    }
+
+    public void remove(Building b) {
+        System.out.println(b.getBuildingNum());
+        int currentIndex = 0;
+        int foundIndex = -1;
+
+        for (Building building : heapArray) {
+            if (building.getBuildingNum() == b.getBuildingNum()) {
+                foundIndex = currentIndex;
+                break;
+            }
+            currentIndex++;
+        }
+
+        heapArray[foundIndex] = heapArray[lastIndex];
+        heapArray[lastIndex] = null;
+        lastIndex -= 1;
+        if (heapArray[foundIndex] != null) {
+            minHeapify(foundIndex);
+        }
+    }
+
+    private void doubleHeapArray() {
+        Building[] arrayTemp = new Building[maxSize * 2];
+
+        for (int i = 0; i < maxSize; i++) {
+            arrayTemp[i] = heapArray[i];
+        }
+
+        heapArray = arrayTemp;
+        maxSize *= 2;
+    }
+
+    private void swap(int a, int b) {
+        Building temp;
+        temp = heapArray[a];
+        heapArray[a] = heapArray[b];
+        heapArray[b] = temp;
     }
 
     private int parent(int i) {
@@ -25,40 +107,17 @@ public class MinHeap {
     }
 
     private boolean isLeaf(int i) {
-        if (i >= (size / 2) && i <= size) {
+        if (i >= (lastIndex / 2) && i <= lastIndex) {
             return true;
         }
         return false;
     }
 
-    private void swap(int a, int b) {
-        int tmp;
-        tmp = heap[a];
-        heap[a] = heap[b];
-        heap[b] = tmp;
-    }
-
-    public int remove() {
-        int pop_item = heap[FRONT];
-        heap[FRONT] = heap[size--];
-        minHeapify(FRONT);
-        return pop_item;
-    }
-
-    public void insert(int element) {
-        heap[++size] = element;
-        int current = size;
-
-        while (heap[current] < heap[parent(current)]) {
-            swap(current, parent(current));
-            current = parent(current);
-        }
-    }
-
     private void minHeapify(int i) {
         if (!isLeaf(i)) {
-            if (heap[i] > heap[leftChild(i)] || heap[i] > heap[rightChild(i)]) {
-                if (heap[leftChild(i)] < heap[rightChild(i)]) {
+            if (heapArray[i].getExecutedTime() > heapArray[leftChild(i)].getExecutedTime()
+                    || heapArray[i].getExecutedTime() > heapArray[rightChild(i)].getExecutedTime()) {
+                if (heapArray[leftChild(i)].getExecutedTime() < heapArray[rightChild(i)].getExecutedTime()) {
                     swap(i, leftChild(i));
                     minHeapify(leftChild(i));
                 } else {
@@ -66,12 +125,6 @@ public class MinHeap {
                     minHeapify(rightChild(i));
                 }
             }
-        }
-    }
-
-    public void MinHeapImplementation() {
-        for (int i = (size / 2); i >= 1; i--) {
-            minHeapify(i);
         }
     }
 
