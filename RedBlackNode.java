@@ -1,6 +1,6 @@
 public class RedBlackNode {
     Building building;
-    int key;
+    // int key;
     RedBlackTree.COLOR color;
     RedBlackNode parent;
     RedBlackNode leftChild;
@@ -8,20 +8,20 @@ public class RedBlackNode {
 
     public RedBlackNode(Building b, RedBlackTree.COLOR color) {
         this.building = b;
-        this.key = b.getBuildingNum();
+        // this.key = b.getBuildingNum();
         this.color = color;
-        this.parent = null;
-        this.leftChild = null;
-        this.rightChild = null;
+        this.parent = RedBlackTree.nil;
+        this.leftChild = RedBlackTree.nil;
+        this.rightChild = RedBlackTree.nil;
     }
 
     public Building getBuilding() {
         return building;
     }
 
-    public void setJob(Building b) {
+    public void setBuilding(Building b) {
         this.building = b;
-        this.key = b.getBuildingNum();
+        // this.key = b.getBuildingNum();
     }
 
     public RedBlackTree.COLOR getColor() {
@@ -30,10 +30,6 @@ public class RedBlackNode {
 
     public void setColor(RedBlackTree.COLOR color) {
         this.color = color;
-    }
-
-    public int getKey() {
-        return key;
     }
 
     public RedBlackNode getParent() {

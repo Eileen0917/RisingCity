@@ -4,7 +4,7 @@ public class RedBlackTree {
         RED, BLACK
     }
 
-    RedBlackNode nil = new RedBlackNode(null, COLOR.BLACK);
+    static RedBlackNode nil = new RedBlackNode(null, COLOR.BLACK);
     RedBlackNode root = nil;
 
     public void insert(Building b) {
@@ -17,7 +17,7 @@ public class RedBlackTree {
         } else {
             node.setColor(COLOR.RED);
             while (true) {
-                if (node.getKey() < temp.getKey()) {
+                if (node.getBuilding().getBuildingNum() < temp.getBuilding().getBuildingNum()) {
                     if (temp.getLeftChild() == nil) {
                         temp.setLeftChild(node);
                         node.setParent(temp);
@@ -25,7 +25,7 @@ public class RedBlackTree {
                     } else {
                         temp = temp.getLeftChild();
                     }
-                } else if (node.getKey() >= temp.getKey()) {
+                } else if (node.getBuilding().getBuildingNum() >= temp.getBuilding().getBuildingNum()) {
                     if (temp.getRightChild() == nil) {
                         temp.setRightChild(node);
                         node.setParent(temp);

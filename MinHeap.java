@@ -56,7 +56,6 @@ public class MinHeap {
     }
 
     public void remove(Building b) {
-        System.out.println(b.getBuildingNum());
         int currentIndex = 0;
         int foundIndex = -1;
 
