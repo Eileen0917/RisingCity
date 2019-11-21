@@ -17,14 +17,13 @@ public class MinHeap {
         heapArray[lastIndex] = newBuilding;
 
         int currentIndex = lastIndex;
-        while (heapArray[parent(currentIndex)].getExecutedTime() > heapArray[currentIndex].getExecutedTime()) {
 
+        while (heapArray[parent(currentIndex)].getExecutedTime() > heapArray[currentIndex].getExecutedTime()) {
             if (currentIndex == 0) {
                 break;
             }
-
             swap(currentIndex, parent(currentIndex));
-            currentIndex = (currentIndex - 1) / 2;
+            currentIndex = parent(currentIndex);
         }
     }
 
@@ -94,15 +93,15 @@ public class MinHeap {
     }
 
     private int parent(int i) {
-        return i / 2;
+        return (i - 1) / 2;
     }
 
     private int leftChild(int i) {
-        return (2 * i);
+        return (2 * i) + 1;
     }
 
     private int rightChild(int i) {
-        return (2 * i) + 1;
+        return (2 * i) + 2;
     }
 
     private boolean isLeaf(int i) {

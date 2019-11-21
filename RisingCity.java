@@ -1,9 +1,13 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class RisingCity {
     private static BufferedReader reader;
+    private static BufferedWriter writer;
     private static int globalCounter = 0;
     private static Boolean keepWorking = true;
     private static int runningBuildingCounter;
@@ -15,8 +19,9 @@ public class RisingCity {
         runningBuildingCounter = 0;
         runningBuilding = null;
 
-        openFile();
+        openReadFile(args[0]);
         String[] nextLine = readFile();
+        openWriteFile();
 
         do {
             if (Integer.valueOf(nextLine[0]).equals(globalCounter)) {
@@ -28,8 +33,31 @@ public class RisingCity {
                     break;
 
                 case "PrintBuliding":
-                    // print
-                    System.out.println("ready to print");
+                    if (nextLine[4] == "") {
+                        Building b = rbt.search(Integer.valueOf(nextLine[2]));
+                        if (b == null) {
+                            String str = "(0,0,0)";
+                            writeFile(str);
+                        } else {
+                            String str = "(" + b.getBuildingNum() + ", " + b.getExecutedTime() + ", " + b.getTotalTime()
+                                    + ")";
+                            writeFile(str);
+                        }
+                    } else {
+                        ArrayList<Building> list = new ArrayList<Building>();
+                        list = rbt.searchInRange(list, Integer.valueOf(nextLine[2]), Integer.valueOf(nextLine[4]));
+                        if (list.size() == 0) {
+                            System.out.println("(0,0,0)");
+                        } else {
+                            String str = new String();
+                            for (Building b : list) {
+                                str += "(" + b.getBuildingNum() + "," + b.getExecutedTime() + "," + b.getTotalTime()
+                                        + "),";
+                            }
+                            str = str.substring(0, str.length() - 1);
+                            writeFile(str);
+                        }
+                    }
                     break;
                 }
 
@@ -43,6 +71,8 @@ public class RisingCity {
             constructBuilding();
             globalCounter += 1;
         } while (nextLine[1] != "" || keepWorking);
+
+        stopReadAndWriteFile();
     }
 
     private static void setBuilding() {
@@ -65,11 +95,13 @@ public class RisingCity {
             heap.increaseKey(runningBuilding, 1);
             runningBuildingCounter -= 1;
             if (runningBuilding.getExecutedTime() == runningBuilding.getTotalTime()) {
-                // rbt.delete(runningBuilding);
-                heap.remove(runningBuilding);
 
-                // TODO: write to output file
-                System.out.println("finish building.");
+                heap.remove(runningBuilding);
+                rbt.remove(runningBuilding);
+
+                int finishedDay = globalCounter + 1;
+                String str = "(" + runningBuilding.getBuildingNum() + "," + finishedDay + ")";
+                writeFile(str);
 
                 runningBuilding = heap.findConstructBuilding();
                 if (runningBuilding == null) {
@@ -120,9 +152,35 @@ public class RisingCity {
         return new String[] { day, command, bNum, totalTime, bNum2 };
     }
 
-    private static void openFile() {
+    private static void openReadFile(String file) {
         try {
-            reader = new BufferedReader(new FileReader("input.txt"));
+            reader = new BufferedReader(new FileReader(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void openWriteFile() {
+        try {
+            writer = new BufferedWriter(new FileWriter("output_file.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void writeFile(String str) {
+        try {
+            writer.write(str);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void stopReadAndWriteFile() {
+        try {
+            reader.close();
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

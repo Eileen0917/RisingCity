@@ -1,7 +1,7 @@
 public class Building {
-    int buildingNum;
-    int totalTime;
-    int executedTime;
+    private int buildingNum;
+    private int totalTime;
+    private int executedTime;
 
     public Building(int bNum, int totalTime) {
         this.buildingNum = bNum;
