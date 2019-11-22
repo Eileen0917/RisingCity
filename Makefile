@@ -10,7 +10,7 @@ CLASSES = \
 		MinHeap.java \
 		RedBlackTree.java \
 		RedBlackNode.java \
-		RisingCity.java 
+		risingCity.java 
 
 default: classes
 

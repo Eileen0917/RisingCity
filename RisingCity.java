@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class RisingCity {
+public class risingCity {
     private static BufferedReader reader;
     private static BufferedWriter writer;
     private static int globalCounter = 0;
@@ -19,12 +19,15 @@ public class RisingCity {
         runningBuildingCounter = 0;
         runningBuilding = null;
 
+        // open the input file and make it read only one line a time.
         openReadFile(args[0]);
         String[] nextLine = readFile();
         openWriteFile();
 
         do {
+            // do the input command when the day is equal to global counter.
             if (Integer.valueOf(nextLine[0]).equals(globalCounter)) {
+
                 switch (nextLine[1]) {
                 case "Insert":
                     Building newBuilding = new Building(Integer.valueOf(nextLine[2]), Integer.valueOf(nextLine[3]));
@@ -61,23 +64,30 @@ public class RisingCity {
                     break;
                 }
 
+                // read next line of input to be next working command.
                 nextLine = readFile();
             }
 
+            // if already finished a building for 5 days, find a new one.
             if (runningBuildingCounter == 0) {
                 setBuilding();
             }
 
+            // construct the selected building.
             constructBuilding();
+
+            // a day pass.
             globalCounter += 1;
         } while (nextLine[1] != "" || keepWorking);
 
+        // finish while loop and close reader and writer.
         stopReadAndWriteFile();
     }
 
     private static void setBuilding() {
         runningBuilding = heap.findConstructBuilding();
 
+        // if runningBuilding == null, all building is finished.
         if (runningBuilding == null) {
             keepWorking = false;
             return;
@@ -95,10 +105,10 @@ public class RisingCity {
             heap.increaseKey(runningBuilding, 1);
             runningBuildingCounter -= 1;
             if (runningBuilding.getExecutedTime() == runningBuilding.getTotalTime()) {
-
                 heap.remove(runningBuilding);
                 rbt.remove(runningBuilding);
 
+                // counter added after this line so just +1 here to print.
                 int finishedDay = globalCounter + 1;
                 String str = "(" + runningBuilding.getBuildingNum() + "," + finishedDay + ")";
                 writeFile(str);

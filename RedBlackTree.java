@@ -12,6 +12,8 @@ public class RedBlackTree {
     public void insert(Building b) {
         RedBlackNode node = new RedBlackNode(b, COLOR.RED);
         RedBlackNode temp = root;
+
+        // first node
         if (root == nil) {
             root = node;
             node.setColor(COLOR.BLACK);
@@ -37,11 +39,14 @@ public class RedBlackTree {
                     }
                 }
             }
+
+            // do rotation or color flip
             fixTree(node);
         }
     }
 
     public void remove(Building b) {
+        // z is the node need to be removed.
         RedBlackNode z = find(b.getBuildingNum());
         RedBlackNode x;
         RedBlackNode y = z;
@@ -107,10 +112,11 @@ public class RedBlackTree {
 
     private void fixTree(RedBlackNode node) {
         while (node.getParent().getColor() == COLOR.RED) {
+            // set "d" (in ppt) to be uncle
             RedBlackNode uncle = nil;
             if (node.getParent() == node.getParent().getParent().getLeftChild()) {
+                // LL or LR
                 uncle = node.getParent().getParent().getRightChild();
-
                 if (uncle != nil && uncle.getColor() == COLOR.RED) {
                     node.getParent().setColor(COLOR.BLACK);
                     uncle.setColor(COLOR.BLACK);
@@ -127,6 +133,7 @@ public class RedBlackTree {
 
                 rotateRight(node.getParent().getParent());
             } else {
+                // RR or RL
                 uncle = node.getParent().getParent().getLeftChild();
                 if (uncle != nil && uncle.getColor() == COLOR.RED) {
                     node.getParent().setColor(COLOR.BLACK);
@@ -223,6 +230,7 @@ public class RedBlackTree {
     }
 
     private RedBlackNode find(int bNum) {
+        // use buildingNum to find the RedBlackNode
         if (root.getBuilding().getBuildingNum() < bNum) {
             return findNode(root.getRightChild(), bNum);
         } else if (root.getBuilding().getBuildingNum() > bNum) {
@@ -262,7 +270,7 @@ public class RedBlackTree {
             }
             node.setRightChild(node.getRightChild().getLeftChild());
             node.getParent().setLeftChild(node);
-        } else {// Need to rotate root
+        } else {
             RedBlackNode right = root.getRightChild();
             root.setRightChild(right.getLeftChild());
             right.getLeftChild().setParent(root);

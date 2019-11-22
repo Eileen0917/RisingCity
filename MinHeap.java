@@ -10,14 +10,16 @@ public class MinHeap {
     }
 
     public void insert(Building newBuilding) {
+        // check if it is full.
         if ((++lastIndex) == maxSize) {
             doubleHeapArray();
         }
 
+        // add it into heapArray
         heapArray[lastIndex] = newBuilding;
 
+        // swap if it is smaller than it's parent.
         int currentIndex = lastIndex;
-
         while (heapArray[parent(currentIndex)].getExecutedTime() > heapArray[currentIndex].getExecutedTime()) {
             if (currentIndex == 0) {
                 break;
@@ -28,6 +30,7 @@ public class MinHeap {
     }
 
     public Building findConstructBuilding() {
+        // return the first one in heapArray.
         if (lastIndex != -1) {
             return heapArray[0];
         } else {
@@ -39,6 +42,7 @@ public class MinHeap {
         int currentIndex = 0;
         int foundIndex = -1;
 
+        // find the index of b
         for (Building building : heapArray) {
             if (building.getBuildingNum() == b.getBuildingNum()) {
                 foundIndex = currentIndex;
@@ -47,10 +51,14 @@ public class MinHeap {
             currentIndex++;
         }
 
+        // b is not in heapArray
         if (foundIndex == -1) {
             return;
         }
+
         heapArray[foundIndex].setExecutedTime(heapArray[foundIndex].getExecutedTime() + t);
+
+        // need to rebuild the heap after increase key.
         minHeapify(foundIndex);
     }
 
@@ -58,6 +66,7 @@ public class MinHeap {
         int currentIndex = 0;
         int foundIndex = -1;
 
+        // find the index of b
         for (Building building : heapArray) {
             if (building.getBuildingNum() == b.getBuildingNum()) {
                 foundIndex = currentIndex;
@@ -69,6 +78,8 @@ public class MinHeap {
         heapArray[foundIndex] = heapArray[lastIndex];
         heapArray[lastIndex] = null;
         lastIndex -= 1;
+
+        // delete last one don't need to do minHeapify again.
         if (heapArray[foundIndex] != null) {
             minHeapify(foundIndex);
         }
@@ -125,5 +136,4 @@ public class MinHeap {
             }
         }
     }
-
 }
