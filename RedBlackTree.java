@@ -91,19 +91,13 @@ public class RedBlackTree {
     private void searchInRange(ArrayList<Building> list, RedBlackNode node, int bNum1, int bNum2) {
         if (node.getBuilding().getBuildingNum() > bNum1 && node.getBuilding().getBuildingNum() < bNum2) {
             list.add(node.getBuilding());
+        }
+        if (node.getBuilding().getBuildingNum() > bNum1) {
             if (node.getLeftChild() != nil) {
                 searchInRange(list, node.getLeftChild(), bNum1, bNum2);
             }
-            if (node.getRightChild() != nil) {
-                searchInRange(list, node.getRightChild(), bNum1, bNum2);
-            }
-        } else if (node.getBuilding().getBuildingNum() < bNum1) {
-            list.add(node.getBuilding());
-            if (node.getLeftChild() != nil) {
-                searchInRange(list, node.getLeftChild(), bNum1, bNum2);
-            }
-        } else if (node.getBuilding().getBuildingNum() > bNum2) {
-            list.add(node.getBuilding());
+        }
+        if (node.getBuilding().getBuildingNum() < bNum2) {
             if (node.getRightChild() != nil) {
                 searchInRange(list, node.getRightChild(), bNum1, bNum2);
             }

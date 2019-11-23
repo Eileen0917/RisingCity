@@ -129,10 +129,50 @@ public class MinHeap {
                 if (heapArray[leftChild(i)].getExecutedTime() < heapArray[rightChild(i)].getExecutedTime()) {
                     swap(i, leftChild(i));
                     minHeapify(leftChild(i));
+                } else if (heapArray[leftChild(i)].getExecutedTime() > heapArray[rightChild(i)].getExecutedTime()) {
+                    swap(i, rightChild(i));
+                    minHeapify(rightChild(i));
                 } else {
+                    if (heapArray[leftChild(i)].getBuildingNum() < heapArray[rightChild(i)].getBuildingNum()) {
+                        swap(i, leftChild(i));
+                        minHeapify(leftChild(i));
+                    } else {
+                        swap(i, rightChild(i));
+                        minHeapify(rightChild(i));
+                    }
+                }
+            } else if (heapArray[i].getExecutedTime() == heapArray[leftChild(i)].getExecutedTime()
+                    && heapArray[i].getExecutedTime() == heapArray[rightChild(i)].getExecutedTime()) {
+                // because getExecutedTime is same, find the min child and swap it to be parent
+                if (heapArray[i].getBuildingNum() > heapArray[leftChild(i)].getBuildingNum()
+                        || heapArray[i].getBuildingNum() > heapArray[rightChild(i)].getBuildingNum()) {
+                    if (heapArray[leftChild(i)].getBuildingNum() < heapArray[rightChild(i)].getBuildingNum()) {
+                        swap(i, leftChild(i));
+                        minHeapify(leftChild(i));
+                    } else {
+                        swap(i, rightChild(i));
+                        minHeapify(rightChild(i));
+                    }
+                }
+            } else if (heapArray[i].getExecutedTime() == heapArray[leftChild(i)].getExecutedTime()) {
+                if (heapArray[i].getBuildingNum() > heapArray[leftChild(i)].getBuildingNum()) {
+                    swap(i, leftChild(i));
+                    minHeapify(leftChild(i));
+                }
+            } else if (heapArray[i].getExecutedTime() == heapArray[rightChild(i)].getExecutedTime()) {
+                if (heapArray[i].getBuildingNum() > heapArray[rightChild(i)].getBuildingNum()) {
                     swap(i, rightChild(i));
                     minHeapify(rightChild(i));
                 }
+            }
+        } else if (lastIndex == 1 && i == 0) {
+            // only two nodes in the heap
+            if (heapArray[i].getExecutedTime() == heapArray[lastIndex].getExecutedTime()) {
+                if (heapArray[lastIndex].getBuildingNum() < heapArray[i].getBuildingNum()) {
+                    swap(i, lastIndex);
+                }
+            } else if (heapArray[lastIndex].getExecutedTime() < heapArray[i].getExecutedTime()) {
+                swap(i, lastIndex);
             }
         }
     }

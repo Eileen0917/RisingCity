@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class risingCity {
+public class RisingCity {
     private static BufferedReader reader;
     private static BufferedWriter writer;
     private static int globalCounter = 0;
@@ -68,6 +68,11 @@ public class risingCity {
                 nextLine = readFile();
             }
 
+            // check if there is any building finished.
+            if (runningBuilding != null) {
+                checkFinished();
+            }
+
             // if already finished a building for 5 days, find a new one.
             if (runningBuildingCounter == 0) {
                 setBuilding();
@@ -104,20 +109,20 @@ public class risingCity {
         if (runningBuildingCounter != 0 && runningBuilding != null) {
             heap.increaseKey(runningBuilding, 1);
             runningBuildingCounter -= 1;
-            if (runningBuilding.getExecutedTime() == runningBuilding.getTotalTime()) {
-                heap.remove(runningBuilding);
-                rbt.remove(runningBuilding);
+        }
+    }
 
-                // counter added after this line so just +1 here to print.
-                int finishedDay = globalCounter + 1;
-                String str = "(" + runningBuilding.getBuildingNum() + "," + finishedDay + ")";
-                writeFile(str);
+    private static void checkFinished() {
+        if (runningBuilding.getExecutedTime() == runningBuilding.getTotalTime()) {
+            heap.remove(runningBuilding);
+            rbt.remove(runningBuilding);
 
-                runningBuilding = heap.findConstructBuilding();
-                if (runningBuilding == null) {
-                    keepWorking = false;
-                    return;
-                }
+            String str = "(" + runningBuilding.getBuildingNum() + "," + globalCounter + ")";
+            writeFile(str);
+
+            runningBuilding = heap.findConstructBuilding();
+            if (runningBuilding == null) {
+                keepWorking = false;
             }
         }
     }
