@@ -31,7 +31,13 @@ public class RisingCity {
                 switch (nextLine[1]) {
                 case "Insert":
                     Building newBuilding = new Building(Integer.valueOf(nextLine[2]), Integer.valueOf(nextLine[3]));
-                    heap.insert(newBuilding);
+                    String result = heap.insert(newBuilding);
+                    if (result.equals("duplicated")) {
+                        String str = "You insert duplicated building number.";
+                        writeFile(str);
+                        stopReadAndWriteFile();
+                        return;
+                    }
                     rbt.insert(newBuilding);
                     break;
 

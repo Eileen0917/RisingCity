@@ -9,7 +9,13 @@ public class MinHeap {
         heapArray = new Building[1];
     }
 
-    public void insert(Building newBuilding) {
+    public String insert(Building newBuilding) {
+        int foundIndex = findBuildingIndex(newBuilding);
+
+        if (foundIndex != -1) {
+            return "duplicated";
+        }
+
         // check if it is full.
         if ((++lastIndex) == maxSize) {
             doubleHeapArray();
@@ -27,6 +33,8 @@ public class MinHeap {
             swap(currentIndex, parent(currentIndex));
             currentIndex = parent(currentIndex);
         }
+
+        return "ok";
     }
 
     public Building findConstructBuilding() {
@@ -39,17 +47,7 @@ public class MinHeap {
     }
 
     public void increaseKey(Building b, int t) {
-        int currentIndex = 0;
-        int foundIndex = -1;
-
-        // find the index of b
-        for (Building building : heapArray) {
-            if (building.getBuildingNum() == b.getBuildingNum()) {
-                foundIndex = currentIndex;
-                break;
-            }
-            currentIndex++;
-        }
+        int foundIndex = findBuildingIndex(b);
 
         // b is not in heapArray
         if (foundIndex == -1) {
@@ -63,17 +61,7 @@ public class MinHeap {
     }
 
     public void remove(Building b) {
-        int currentIndex = 0;
-        int foundIndex = -1;
-
-        // find the index of b
-        for (Building building : heapArray) {
-            if (building.getBuildingNum() == b.getBuildingNum()) {
-                foundIndex = currentIndex;
-                break;
-            }
-            currentIndex++;
-        }
+        int foundIndex = findBuildingIndex(b);
 
         heapArray[foundIndex] = heapArray[lastIndex];
         heapArray[lastIndex] = null;
@@ -175,5 +163,19 @@ public class MinHeap {
                 swap(i, lastIndex);
             }
         }
+    }
+
+    private int findBuildingIndex(Building b) {
+        int currentIndex = 0;
+        int foundIndex = -1;
+
+        // find the index of b
+        for (currentIndex = 0; currentIndex < lastIndex + 1; currentIndex++) {
+            if (heapArray[currentIndex].getBuildingNum() == b.getBuildingNum()) {
+                foundIndex = currentIndex;
+                break;
+            }
+        }
+        return foundIndex;
     }
 }
